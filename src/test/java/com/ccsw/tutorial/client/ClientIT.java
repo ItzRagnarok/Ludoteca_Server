@@ -112,4 +112,14 @@ public class ClientIT {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    public void saveWithExistsNameShouldReturnConflict() {
+        ClientDto dto = new ClientDto();
+        dto.setName("Pedro");
+
+        ResponseEntity<?> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
 }

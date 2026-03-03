@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,5 +106,17 @@ public class ClientTest {
         Client client = clientService.get(EXISTS_CLIENT_ID);
 
         assertNull(client);
+    }
+
+    @Test
+    public void saveWithExistsNameShouldThrowException() {
+        ClientDto clientDto = new ClientDto();
+        clientDto.setName(CLIENT_NAME);
+
+        when(clientRepository.existsByName(CLIENT_NAME)).thenReturn(true);
+
+        assertThrows(ResponseStatusException.class, () -> clientService.save(null, clientDto));
+
+        verify(clientRepository, never()).save(any(Client.class));
     }
 }
