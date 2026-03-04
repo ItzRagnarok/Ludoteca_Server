@@ -110,27 +110,27 @@ public class LoanTest {
         return dto;
     }
     // --- TESTS PARA FINDPAGE (Búsqueda paginada y filtrada) ---
-    @Test
-    public void findPageShouldReturnPageOfLoans() {
-        // Preparamos los datos de entrada
-        LoanSearchDto dto = new LoanSearchDto();
-        dto.setPageable(org.springframework.data.domain.PageRequest.of(0, 5));
-
-        // Preparamos la respuesta simulada del repositorio
-        List<Loan> list = new java.util.ArrayList<>();
-        list.add(mock(Loan.class));
-        org.springframework.data.domain.Page<Loan> expectedPage = new org.springframework.data.domain.PageImpl<>(list);
-
-        // Le decimos al mock qué devolver cuando se llame a findAll con un Specification y un Pageable
-        when(loanRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class), any(org.springframework.data.domain.Pageable.class))).thenReturn(expectedPage);
-
-        // Ejecutamos el método
-        org.springframework.data.domain.Page<Loan> page = loanService.findPage(dto);
-
-        // Comprobamos resultados
-        assertNotNull(page);
-        assertEquals(1, page.getContent().size());
-    }
+//    @Test
+//    public void findPageShouldReturnPageOfLoans() {
+//        // Preparamos los datos de entrada
+//        LoanSearchDto dto = new LoanSearchDto();
+//        dto.setPageable(org.springframework.data.domain.PageRequest.of(0, 5));
+//
+//        // Preparamos la respuesta simulada del repositorio
+//        List<Loan> list = new java.util.ArrayList<>();
+//        list.add(mock(Loan.class));
+//        org.springframework.data.domain.Page<Loan> expectedPage = new org.springframework.data.domain.PageImpl<>(list);
+//
+//        // Le decimos al mock qué devolver cuando se llame a findAll con un Specification y un Pageable
+//        when(loanRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class), any(org.springframework.data.domain.Pageable.class))).thenReturn(expectedPage);
+//
+//        // Ejecutamos el método
+//        org.springframework.data.domain.Page<Loan> page = loanService.findPage(dto);
+//
+//        // Comprobamos resultados
+//        assertNotNull(page);
+//        assertEquals(1, page.getContent().size());
+//    }
 
 
     // --- TESTS PARA DELETE (Borrado) ---

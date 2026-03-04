@@ -1,20 +1,21 @@
 package com.ccsw.tutorial.loan.model;
 
+import com.ccsw.tutorial.common.pagination.PageableRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
 public class LoanSearchDto {
-    private Pageable pageable;
+    private PageableRequest pageable;
     private Long gameId;
     private Long clientId;
     private LocalDate date;
 
-    public Pageable getPageable() {
+    public PageableRequest getPageable() {
         return pageable;
     }
 
-    public void setPageable(Pageable pageable) {
+    public void setPageable(PageableRequest pageable) {
         this.pageable = pageable;
     }
 

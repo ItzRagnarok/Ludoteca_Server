@@ -7,6 +7,8 @@ import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,8 +29,12 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public Page<Loan> findPage(LoanSearchDto dto) {
         LoanSpecification spec = new LoanSpecification(dto);
+        Pageable pageable = PageRequest.of(
+                dto.getPageable().getPageNumber(),
+                dto.getPageable().getPageSize()
+        );
 
-        return loanRepository.findAll(spec, dto.getPageable());
+        return loanRepository.findAll(spec, pageable);
     }
 
     @Override
