@@ -1,6 +1,9 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.client.model.ClientDto;
+import com.ccsw.tutorial.common.pagination.PageableRequest;
+import com.ccsw.tutorial.game.model.Game;
 import com.ccsw.tutorial.game.model.GameDto;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
@@ -11,6 +14,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -83,8 +91,8 @@ public class LoanTest {
         when(loanRepository.existsByGameIdAndDates(anyLong(), any(), any(), any())).thenReturn(false);
         when(loanRepository.countByClientIdAndDates(anyLong(), any(), any(), any())).thenReturn(0L);
 
-        when(clientService.get(anyLong())).thenReturn(new com.ccsw.tutorial.client.model.Client());
-        when(gameService.get(anyLong())).thenReturn(new com.ccsw.tutorial.game.model.Game());
+        when(clientService.get(anyLong())).thenReturn(new Client());
+        when(gameService.get(anyLong())).thenReturn(new Game());
 
         loanService.save(null, dto);
 
@@ -110,27 +118,30 @@ public class LoanTest {
         return dto;
     }
     // --- TESTS PARA FINDPAGE (Búsqueda paginada y filtrada) ---
-//    @Test
-//    public void findPageShouldReturnPageOfLoans() {
-//        // Preparamos los datos de entrada
-//        LoanSearchDto dto = new LoanSearchDto();
-//        dto.setPageable(org.springframework.data.domain.PageRequest.of(0, 5));
-//
-//        // Preparamos la respuesta simulada del repositorio
-//        List<Loan> list = new java.util.ArrayList<>();
-//        list.add(mock(Loan.class));
-//        org.springframework.data.domain.Page<Loan> expectedPage = new org.springframework.data.domain.PageImpl<>(list);
-//
-//        // Le decimos al mock qué devolver cuando se llame a findAll con un Specification y un Pageable
-//        when(loanRepository.findAll(any(org.springframework.data.jpa.domain.Specification.class), any(org.springframework.data.domain.Pageable.class))).thenReturn(expectedPage);
-//
-//        // Ejecutamos el método
-//        org.springframework.data.domain.Page<Loan> page = loanService.findPage(dto);
-//
-//        // Comprobamos resultados
-//        assertNotNull(page);
-//        assertEquals(1, page.getContent().size());
-//    }
+    @Test
+    public void findPageShouldReturnPageOfLoans() {
+        // Preparamos los datos de entrada
+        LoanSearchDto dto = new LoanSearchDto();
+        PageableRequest pageable = new PageableRequest();
+        pageable.setPageNumber(0);
+        pageable.setPageSize(5);
+        dto.setPageable(pageable);
+
+        // Preparamos la respuesta simulada del repositorio
+        List<Loan> list = new java.util.ArrayList<>();
+        list.add(mock(Loan.class));
+        Page<Loan> expectedPage = new PageImpl<>(list);
+
+        // Le decimos al mock qué devolver cuando se llame a findAll con un Specification y un Pageable
+        when(loanRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
+
+        // Ejecutamos el método
+        Page<Loan> page = loanService.findPage(dto);
+
+        // Comprobamos resultados
+        assertNotNull(page);
+        assertEquals(1, page.getContent().size());
+    }
 
 
     // --- TESTS PARA DELETE (Borrado) ---

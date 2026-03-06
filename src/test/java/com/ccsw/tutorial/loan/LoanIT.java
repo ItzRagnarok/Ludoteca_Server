@@ -38,21 +38,21 @@ public class LoanIT {
 
     ParameterizedTypeReference<Map<String, Object>> responseTypePage = new ParameterizedTypeReference<Map<String, Object>>() {};
 
-//    @Test
-//    public void findPageShouldReturnPageOfLoans() {
-//        LoanSearchDto searchDto = new LoanSearchDto();
-//        PageableRequest pageable = new PageableRequest();
-//        pageable.setPageNumber(0);
-//        pageable.setPageSize(5);
-//        searchDto.setPageable(pageable);
-//
-//        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-//                LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
-//
-//        assertNotNull(response);
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertNotNull(response.getBody().get("content"));
-//    }
+    @Test
+    public void findPageShouldReturnPageOfLoans() {
+        LoanSearchDto searchDto = new LoanSearchDto();
+        PageableRequest pageable = new PageableRequest();
+        pageable.setPageNumber(0);
+        pageable.setPageSize(5);
+        searchDto.setPageable(pageable);
+
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody().get("content"));
+    }
 
     @Test
     public void saveWithValidDataShouldCreateNewLoan() {
