@@ -2,9 +2,11 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
-import jakarta.persistence.criteria.*;
 
 public class LoanSpecification implements Specification<Loan> {
     private LoanSearchDto criteria;
@@ -15,7 +17,6 @@ public class LoanSpecification implements Specification<Loan> {
 
     @Override
     public Predicate toPredicate(Root<Loan> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        // Inicializamos el predicado vacío (un "AND" que por defecto es true)
         Predicate predicate = builder.conjunction();
 
         // Filtro Juego

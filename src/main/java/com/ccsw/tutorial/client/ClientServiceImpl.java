@@ -29,7 +29,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void save(Long id, ClientDto dto) {
-
         // Validación para evitar clientes duplicados
         if (this.clientRepository.existsByName(dto.getName())) {
             //throw new RuntimeException("El cliente con nombre " + dto.getName() + " ya existe");

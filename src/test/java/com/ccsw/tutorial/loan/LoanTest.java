@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.server.ResponseStatusException;
@@ -117,59 +116,46 @@ public class LoanTest {
 
         return dto;
     }
-    // --- TESTS PARA FINDPAGE (Búsqueda paginada y filtrada) ---
+
     @Test
     public void findPageShouldReturnPageOfLoans() {
-        // Preparamos los datos de entrada
         LoanSearchDto dto = new LoanSearchDto();
         PageableRequest pageable = new PageableRequest();
         pageable.setPageNumber(0);
         pageable.setPageSize(5);
         dto.setPageable(pageable);
 
-        // Preparamos la respuesta simulada del repositorio
         List<Loan> list = new java.util.ArrayList<>();
         list.add(mock(Loan.class));
         Page<Loan> expectedPage = new PageImpl<>(list);
 
-        // Le decimos al mock qué devolver cuando se llame a findAll con un Specification y un Pageable
         when(loanRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
 
-        // Ejecutamos el método
         Page<Loan> page = loanService.findPage(dto);
 
-        // Comprobamos resultados
         assertNotNull(page);
         assertEquals(1, page.getContent().size());
     }
 
-
-    // --- TESTS PARA DELETE (Borrado) ---
     public static final Long EXISTS_LOAN_ID = 1L;
     public static final Long NOT_EXISTS_LOAN_ID = 0L;
 
     @Test
     public void deleteExistsLoanIdShouldDelete() {
-        // Simulamos que el préstamo SÍ existe en base de datos
         Loan loan = mock(Loan.class);
         when(loanRepository.findById(EXISTS_LOAN_ID)).thenReturn(java.util.Optional.of(loan));
 
-        // Ejecutamos
         loanService.delete(EXISTS_LOAN_ID);
 
-        // Verificamos que se ha llamado al método deleteById del repositorio
         verify(loanRepository).deleteById(EXISTS_LOAN_ID);
     }
 
     @Test
     public void deleteNotExistsLoanIdShouldThrowException() {
-        // Simulamos que el préstamo NO existe
         when(loanRepository.findById(NOT_EXISTS_LOAN_ID)).thenReturn(java.util.Optional.empty());
 
-        // Verificamos que salta la excepción
         assertThrows(ResponseStatusException.class, () -> loanService.delete(NOT_EXISTS_LOAN_ID));
 
-        // Verificamos que NUNCA se ha llegado a llamar al borrado real
         verify(loanRepository, never()).deleteById(anyLong());
     }
 }
